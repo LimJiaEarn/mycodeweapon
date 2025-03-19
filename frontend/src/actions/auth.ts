@@ -7,6 +7,7 @@ import {
   SignInCredentials,
   AuthResult,
 } from "@/providers/auth-provider";
+import { headers } from "next/headers";
 
 // suffix of _SA to denote this function is a server action in auth-provider
 
@@ -17,17 +18,19 @@ export async function signUp_SA({
 }: SignUpCredentials): Promise<AuthResult> {
   const supabase = await createClient();
 
-  const url =
-    process.env.NODE_ENV === "production"
-      ? process.env.NEXT_PUBLIC_PRODUCTION_URL
-      : process.env.NEXT_PUBLIC_DEVELOPMENT_URL;
+  const reqHeader = headers();
+  const host = reqHeader.get("x-forwarded-host") || reqHeader.get("host");
+  const protocol =
+    reqHeader.get("x-forwarded-proto") ||
+    (process.env.NODE_ENV === "production" ? "https" : "http");
 
+  // Sign up the user with the dynamic redirect URL
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: { username },
-      emailRedirectTo: `${url}/api/auth/verified`,
+      emailRedirectTo: `${protocol}://${host}/api/auth/verified`,
     },
   });
 

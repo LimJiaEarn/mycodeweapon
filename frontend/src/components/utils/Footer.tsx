@@ -13,15 +13,15 @@ export default function Footer() {
             <span className="font-medium text-foreground">My Code Weapon</span>
           </div>
 
-          <div className="mt-2">
-            No copyrights. 100% open sourced on{" "}
+          <div className="mt-2 max-w-xs">
+            No copyrights. We are 100% open sourced on{" "}
             <Link
               className="underline hover:text-blue-500 hover:scale-150"
-              href={`${GITHUB_URL}/issues`}
+              href={`${GITHUB_URL}`}
             >
               GitHub
-            </Link>
-            !
+            </Link>{" "}
+            and welcome forks and contributions!
           </div>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-10 items-start mt-10 sm:mt-0 md:mt-0">
