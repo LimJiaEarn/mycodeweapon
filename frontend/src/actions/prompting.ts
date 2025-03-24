@@ -73,24 +73,23 @@ export const cloudPromptAi = async ({
       });
     }
 
-    const sendMessages: ChatCompletionMessageParam[] = [
+    const messages: ChatCompletionMessageParam[] = [
       { role: AiChatRole.System, content: systemMessage.join("\n\n\n") },
       ...chatMessages.slice(1),
     ];
 
     if (imageBase64 || codeContext) {
-      sendMessages.push(contextContent);
+      messages.push(contextContent);
     }
 
-    let aiInitParams: OpenAiInitParams = { apiKey };
-    if (aiOption !== AiOption.OpenAi) {
-      aiInitParams.baseURL = getAiOptionBaseUrl(aiOption);
-    }
+    const llmClient = new OpenAi({
+      apiKey,
+      baseURL: getAiOptionBaseUrl(aiOption),
+    });
 
-    const openai = new OpenAi(aiInitParams);
-    const response = await openai.chat.completions.create({
+    const response = await llmClient.chat.completions.create({
       model: aiModel,
-      messages: sendMessages,
+      messages,
     });
 
     const reply = response.choices[0].message.content;

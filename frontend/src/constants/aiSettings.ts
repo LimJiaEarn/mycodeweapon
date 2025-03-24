@@ -28,8 +28,8 @@ export const AI_OPTIONS_AND_MODELS: Record<AiOption, string[]> = {
 export const BASE_URLS: Record<AiOption, string> = {
   GEMINI: "https://generativelanguage.googleapis.com/v1beta/openai/",
   OPENAI: "",
-  // DEEPSEEK: "https://api.deepseek.com/v1",
   CLAUDE: "https://api.anthropic.com/v1/",
+  // DEEPSEEK: "https://api.deepseek.com/v1",
   // PERPLEXITY: "https://api.perplexity.ai",
 };
 
