@@ -15,6 +15,7 @@ interface useAiChatProps {
   aiModel: string;
   storePref: KeyStorePref;
   apiKey: string | null;
+  systemPrompt: string;
 }
 
 export interface promptAiParams {
@@ -34,6 +35,7 @@ export const useAiChat = ({
   aiModel,
   storePref,
   apiKey,
+  systemPrompt,
 }: useAiChatProps) => {
   const [prompt, setPrompt] = useState<string>("");
   const [isPrompting, setIsPrompting] = useState<boolean>(false);
@@ -120,6 +122,7 @@ export const useAiChat = ({
         chatMessages,
         codeContext: includeCode ? { code, language } : null,
         imageBase64: includeQuestionImg ? imageBase64 : null,
+        system_prompt: systemPrompt,
       });
 
       if (!success) throw new Error(message);

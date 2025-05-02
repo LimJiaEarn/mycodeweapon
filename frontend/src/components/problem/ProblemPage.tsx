@@ -126,7 +126,7 @@ const ProblemPage = ({ title }: { title: string }) => {
                   className="mb-0.5 bg-background rounded-lg p-4"
                 >
                   <AiChat
-                    userId={user?.id || ""}
+                    user={user}
                     questionImage={problemStates.questionImage}
                     code={problemStates.code}
                     language={

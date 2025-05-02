@@ -36,15 +36,21 @@ import { useAiChat } from "@/hooks/useAiChat";
 import { SimpleResponse } from "@/types/global";
 import Link from "next/link";
 import ChatMessages from "./ChatMessages";
+import { useAiSettings } from "@/hooks/useAiSettings";
+import { User } from "@supabase/supabase-js";
 
 interface AiChatProps {
-  userId: string;
+  user: User | null;
   questionImage: File | null;
   code: string;
   language: string;
 }
 
-const AiChat = ({ userId, questionImage, code, language }: AiChatProps) => {
+const AiChat = ({ user, questionImage, code, language }: AiChatProps) => {
+  const userId = user?.id || "";
+
+  const { prePrompt } = useAiSettings(user);
+
   const {
     defaultAiOption,
     defaultAiModel,
@@ -73,6 +79,7 @@ const AiChat = ({ userId, questionImage, code, language }: AiChatProps) => {
     language,
     storePref: keyPref,
     apiKey: apiKey,
+    systemPrompt: prePrompt,
   });
 
   return (

@@ -5,7 +5,7 @@ import {
   AiChatMessage,
   AiChatRole,
 } from "@/types/ai";
-import { SYSTEM_PROMPT, getAiOptionBaseUrl } from "@/constants/aiSettings";
+import { getAiOptionBaseUrl } from "@/constants/aiSettings";
 import { fetchDecryptedApiKey } from "@/app/actions/apiKeys";
 import OpenAi from "openai";
 import { SimpleDataResponse } from "@/types/global";
@@ -27,6 +27,7 @@ interface cloudPromptAiProps {
   chatMessages: ChatCompletionMessageParam[];
   codeContext: userCode | null;
   imageBase64: string | null;
+  system_prompt: string;
 }
 
 export const cloudPromptAi = async ({
@@ -37,6 +38,7 @@ export const cloudPromptAi = async ({
   chatMessages,
   codeContext,
   imageBase64,
+  system_prompt,
 }: cloudPromptAiProps): Promise<SimpleDataResponse<string>> => {
   try {
     if (!apiKey) {
@@ -45,7 +47,7 @@ export const cloudPromptAi = async ({
     }
 
     // Prepare messages array with system prompt
-    const systemMessage = [SYSTEM_PROMPT];
+    const systemMessage = [system_prompt];
 
     const contextContent: ChatCompletionMessageParam = {
       role: AiChatRole.User,
