@@ -89,9 +89,19 @@ export const cloudPromptAi = async ({
       baseURL: getAiOptionBaseUrl(aiOption),
     });
 
+    // Add request details for debugging
+    console.log(`Sending request to ${aiOption} with model ${aiModel}`);
+    
     const response = await llmClient.chat.completions.create({
       model: aiModel,
       messages,
+    });
+
+    console.log("Response received:", {
+      status: "success",
+      model: response.model,
+      usage: response.usage,
+      choices_length: response.choices.length,
     });
 
     const reply = response.choices[0].message.content;
@@ -105,12 +115,22 @@ export const cloudPromptAi = async ({
       message: "Successfully received reply",
       data: reply,
     };
-  } catch (error) {
-    console.log(error);
+  } catch (error: any) {
+    // Enhanced error logging
+    const errorDetails = {
+      message: error.message || "Unknown error",
+      type: error.type || "Unknown type",
+      code: error.code || "Unknown code",
+      param: error.param,
+      statusCode: error.status || error.statusCode,
+    };
+    
+    console.error("LLM API Error:", errorDetails);
+    
     return {
       success: false,
-      message: "Failed to get reply",
-      data: "",
+      message: `Failed to get reply: ${errorDetails.message}`,
+      data: JSON.stringify(errorDetails, null, 2),
     };
   }
 };
