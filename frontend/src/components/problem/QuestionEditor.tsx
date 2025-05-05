@@ -132,7 +132,7 @@ const QuestionEditor = ({
             </div>
           ) : (
             <div className="text-foreground px-3 rounded-md flex items-center justify-between">
-              <p className="w-full">{tempTitle}</p>
+              <p className="w-full capitalize">{tempTitle}</p>
               <Button
                 variant="ghost"
                 size="icon"
