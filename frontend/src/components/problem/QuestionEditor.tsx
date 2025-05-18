@@ -37,32 +37,11 @@ const QuestionEditor = ({
   setImage,
 }: QuestionEditorProps) => {
   const { toast } = useToast();
-
-  const [isEdittingTitle, setIsEditingTitle] = useState<boolean>(false);
-  const [tempTitle, setTempTitle] = useState<string>(title);
   const [preview, setPreview] = useState<string>(imageUrl || "");
-
-  useEffect(() => {
-    setTempTitle(title);
-  }, [title]);
 
   useEffect(() => {
     setPreview(imageUrl || "");
   }, [imageUrl]);
-
-  const handleTitleSave = async () => {
-    const { success, message } = await setTitle(tempTitle.trim());
-
-    if (!success) {
-      toast({
-        title: "Invalid Title",
-        description:
-          "Ensure title do not contain special characters or is unique!",
-      });
-    } else {
-      setIsEditingTitle(false);
-    }
-  };
 
   const handleImageUpload = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -104,44 +83,15 @@ const QuestionEditor = ({
 
   return (
     <div className="w-full h-full flex flex-col space-y-2">
-      {/* Title component */}
+      {/* Title component - now read-only */}
       <div className="space-y-2 flex justify-between items-center gap-2">
         <div className="flex_center gap-2">
           <Label htmlFor="title" className="text-lg font-bold text-left">
             Title:
           </Label>
-          {isEdittingTitle ? (
-            <div className="flex items-center justify-between space-x-2">
-              <Input
-                id="title"
-                className="w-full bg-secondary"
-                value={tempTitle}
-                onChange={(e) => {
-                  setTempTitle(e.target.value);
-                }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" && !e.shiftKey) {
-                    e.preventDefault();
-                    handleTitleSave();
-                  }
-                }}
-              />
-              <Button onClick={handleTitleSave}>
-                <Save className="icon" />
-              </Button>
-            </div>
-          ) : (
-            <div className="text-foreground px-3 rounded-md flex items-center justify-between">
-              <p className="w-full capitalize">{tempTitle}</p>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsEditingTitle(true)}
-              >
-                <Edit2 className="icon" />
-              </Button>
-            </div>
-          )}
+          <div className="text-foreground px-3 rounded-md flex items-center justify-between">
+            <p className="w-full capitalize">{title}</p>
+          </div>
         </div>
 
         <DropdownMenu>

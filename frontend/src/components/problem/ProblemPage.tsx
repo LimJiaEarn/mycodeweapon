@@ -14,17 +14,18 @@ import {
 import { useAuth } from "@/providers/auth-provider";
 import { useProblem } from "@/hooks/useProblem";
 import { useJudge0 } from "@/hooks/useJudge0";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { judge0ToMonacoMap } from "@/constants/judge0";
+import CreateProblemModal from "./CreateProblemModal";
 
 const ProblemPage = ({ title }: { title: string }) => {
   const router = useRouter();
   const { user, authLoading } = useAuth();
+  const [showCreateModal, setShowCreateModal] = useState(title === "new");
 
   // problem dependencies
-  // const { title } = use(params)
   const {
     problemStates,
     setTitle,
@@ -56,12 +57,16 @@ const ProblemPage = ({ title }: { title: string }) => {
   const handleSaveProblem = async () => {
     try {
       await saveProblem();
-      const newTitle = problemStates.title.replace(/ /g, "-");
-      if (newTitle !== title) {
-        router.push(`/problem/${newTitle}`);
-      }
     } catch (err) {
       console.error("Error saving problem:", err);
+    }
+  };
+
+  // Handle modal close
+  const handleCloseModal = () => {
+    setShowCreateModal(false);
+    if (title === "new") {
+      router.push("/problem");
     }
   };
 
@@ -73,10 +78,10 @@ const ProblemPage = ({ title }: { title: string }) => {
         <div>
           <Link
             className="underline text-blue-600 hover:text-blue-700"
-            href="/problem/new"
+            href="/problem"
             onClick={resetProblem}
           >
-            Create new problem
+            Back to problems
           </Link>
         </div>
       </div>
@@ -85,6 +90,14 @@ const ProblemPage = ({ title }: { title: string }) => {
 
   return (
     <Suspense fallback={<LoadingContent />}>
+      {showCreateModal && (
+        <CreateProblemModal
+          isOpen={showCreateModal}
+          onClose={handleCloseModal}
+          user={user}
+        />
+      )}
+
       {authLoading || isLoading ? (
         <LoadingContent />
       ) : (
