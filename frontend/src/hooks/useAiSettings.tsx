@@ -70,6 +70,31 @@ export const useAiSettings = (user: User | null) => {
         setDefaultAiModel(
           aiConfig?.defaultAiModel || AI_OPTIONS_AND_MODELS[AiOption.Gemini][0]
         );
+      } else {
+        // Insert default values if no config exists, happens for new user
+        console.log(
+          "[retrieveApiDetails] No AI config found, creating default config"
+        );
+        const { error: insertError } = await supabase
+          .from(AI_CONFIG_TABLE)
+          .insert({
+            userId,
+            prePrompt: SYSTEM_PROMPT,
+            defaultAiOption: AiOption.Gemini,
+            defaultAiModel: AI_OPTIONS_AND_MODELS[AiOption.Gemini][0],
+          });
+
+        if (insertError) {
+          console.log(
+            "[retrieveApiDetails] Error creating default AI config:",
+            insertError
+          );
+        } else {
+          // Set state with default values
+          setPrePrompt(SYSTEM_PROMPT);
+          setDefaultAiOption(AiOption.Gemini);
+          setDefaultAiModel(AI_OPTIONS_AND_MODELS[AiOption.Gemini][0]);
+        }
       }
 
       // fetch every aiOption_config from all tables

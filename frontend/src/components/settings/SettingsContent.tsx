@@ -10,7 +10,6 @@ import { useAuth } from "@/providers/auth-provider";
 import { useProfileSettings } from "@/hooks/useProfileSettings";
 import { useAiSettings } from "@/hooks/useAiSettings";
 import { AiOption, KeyStorePref } from "@/types/ai";
-import { SimpleResponse } from "@/types/global";
 
 const SettingsContent = () => {
   const { toast } = useToast();
@@ -64,8 +63,11 @@ const SettingsContent = () => {
 
   return (
     <div className="w-full h-full flex flex-col justify-start items-start gap-16">
-      <div className="flex flex-col justify-center items-start gap-2">
-        <h2 className="text-lg font-bold ">Profile Settings</h2>
+      <div
+        id="profilesettings"
+        className="flex flex-col justify-center items-start gap-2 w-full pt-4"
+      >
+        <h2 className="text-lg font-bold">Profile Settings</h2>
         <Separator className="w-[90%] mb-2" />
         <ProfileSettingsForm
           username={profileState.username}
@@ -78,7 +80,10 @@ const SettingsContent = () => {
         />
       </div>
 
-      <div className="flex flex-col justify-center items-start gap-2">
+      <div
+        id="aisettings"
+        className="flex flex-col justify-center items-start gap-2 w-full pt-4  max-w-[1000px]"
+      >
         <h2 className="text-lg font-bold">AI Settings</h2>
         <Separator className="w-[90%] mb-2" />
         <AiConfigSettingForm
@@ -92,7 +97,10 @@ const SettingsContent = () => {
         />
       </div>
 
-      <div className="flex flex-col justify-start items-start gap-2">
+      <div
+        id="apikeys"
+        className="flex flex-col justify-start items-start gap-2 w-full pt-4  max-w-[1000px]"
+      >
         <h2 className="text-lg font-bold">API Keys</h2>
         <Separator className="w-[90%] mb-2" />
         {Object.values(AiOption).map((ao, i) => {
@@ -104,9 +112,7 @@ const SettingsContent = () => {
               <AiOptionSettingForm
                 aiOption={ao}
                 apiKey={AiOptionConfigDetails[ao]?.apiKey || ""}
-                storePref={
-                  AiOptionConfigDetails[ao]?.storePref || KeyStorePref.UNSET
-                }
+                storePref={KeyStorePref.CLOUD}
                 updateApiKey={(val) => setApiKeyByAiOption(ao, val)}
                 updateStorePref={(val) => setStorePrefByAiOption(ao, val)}
                 isSaving={isSavingProfile || isSavingAiSettings}
@@ -116,7 +122,10 @@ const SettingsContent = () => {
         })}
       </div>
 
-      <div className="flex flex-col justify-center items-start gap-2">
+      {/* <div
+        id="codeeditorsettings"
+        className="flex flex-col justify-center items-start gap-2 w-full pt-4  max-w-[1000px]"
+      >
         <h2 className="text-lg font-bold">
           Code Editor Settings{" "}
           <span className="ml-3 px-2 py-1 font-bold text-xs rounded-full bg-amber-600 text-gray-100">
@@ -124,7 +133,7 @@ const SettingsContent = () => {
           </span>
         </h2>
         <Separator className="w-[90%] mb-2" />
-      </div>
+      </div> */}
 
       <Button onClick={handleSaveAllSettings} className="ml-auto mt-10 mr-4">
         Save Changes

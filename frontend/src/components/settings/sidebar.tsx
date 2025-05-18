@@ -25,57 +25,42 @@ import { Separator } from "@radix-ui/react-dropdown-menu";
 
 const profileOptions = [
   {
-    title: "Email",
-    url: "#",
+    title: "Username",
+    url: "#profilesettings",
   },
   {
-    title: "Username",
-    url: "#",
+    title: "Email",
+    url: "#profilesettings",
   },
   {
     title: "Password",
-    url: "#",
+    url: "#profilesettings",
   },
 ];
 
 const codeOptions = [
   {
     title: "Font Size",
-    url: "#",
+    url: "#codeeditorsettings",
   },
   {
     title: "Default Language",
-    url: "#",
+    url: "#codeeditorsettings",
   },
 ];
 
 const aiOptions = [
   {
     title: "General",
-    url: "#generalaioptions",
+    url: "#aisettings",
   },
   {
-    title: "Gemini",
-    url: "#geminioptions",
-  },
-  {
-    title: "OpenAI",
-    url: "#openaioptions",
-  },
-  {
-    title: "Deepseek",
-    url: "#deepseekOptions",
-  },
-  {
-    title: "Anthropic",
-    url: "#anthropicoptions",
+    title: "API Keys",
+    url: "#apikeys",
   },
 ];
 
 export function SettingsSidebar() {
-  const { toast } = useToast();
-  const { state } = useSidebar();
-
   return (
     <Sidebar className="absolute bg-background h-[calc(100vh-4rem)]">
       <SidebarContent className="bg-background">
@@ -137,7 +122,7 @@ export function SettingsSidebar() {
             </CollapsibleContent>
           </SidebarGroup>
         </Collapsible>
-        <SidebarSeparator className="my-1" />
+        {/* <SidebarSeparator className="my-1" />
         <Collapsible defaultOpen className="group/collapsible">
           <SidebarGroup>
             <SidebarGroupLabel asChild>
@@ -165,7 +150,7 @@ export function SettingsSidebar() {
               </SidebarGroupContent>
             </CollapsibleContent>
           </SidebarGroup>
-        </Collapsible>
+        </Collapsible> */}
       </SidebarContent>
     </Sidebar>
   );
