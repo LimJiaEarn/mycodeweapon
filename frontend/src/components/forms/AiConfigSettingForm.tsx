@@ -88,7 +88,7 @@ const AiConfigSettingForm = ({
               <Label htmlFor="preprompt" className="text-sm font-semibold">
                 System Prompt
               </Label>
-              <p className="text-sm text-muted-foreground mt-1 max-w-[500px]">
+              <p className="text-sm text-muted-foreground mt-1">
                 This sets the tone and output of LLM model for your
                 conversations. The default has been fine tuned for optimal
                 performance and experience. We discourage major edits especially

@@ -17,6 +17,7 @@ interface ApiKeyContextType {
   saveBasicSettings: (
     pref: KeyStorePref,
     key: string,
+    aiOption: AiOption,
     model: string
   ) => Promise<SimpleResponse>;
   isSavingPref: boolean;
@@ -84,6 +85,7 @@ export function AiProvider({ children }: { children: React.ReactNode }) {
   const saveBasicSettings = async (
     pref: KeyStorePref,
     key: string,
+    aiOption: AiOption,
     model: string
   ): Promise<SimpleResponse> => {
     if (!user) return { success: false, message: "Auth Error" };
@@ -98,7 +100,7 @@ export function AiProvider({ children }: { children: React.ReactNode }) {
       const { success: update1Success, message: msg1 } = await saveApiKey(
         key,
         pref,
-        AiOption.Gemini
+        aiOption
       );
       if (!update1Success) {
         throw Error("Error in saving api key");

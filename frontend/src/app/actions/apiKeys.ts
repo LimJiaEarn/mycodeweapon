@@ -3,8 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { encryptKey, decryptKey } from "./encryption";
 import { AiOption, KeyStorePref } from "@/types/ai";
-import { GoogleGenerativeAI } from "@google/generative-ai";
-import { GEMINI_CONFIG_TABLE, getAiConfigTable } from "@/constants/supabase";
+import { getAiConfigTable } from "@/constants/supabase";
 import { SimpleDataResponse } from "@/types/global";
 
 export async function fetchDecryptedApiKey(
@@ -45,12 +44,13 @@ export async function fetchDecryptedApiKey(
   };
 }
 
-export async function cloudGetApiKey(userId: string) {
+export async function cloudGetApiKey(userId: string, aiOption: AiOption) {
   const supabase = await createClient();
+  const aiOptionTable = getAiConfigTable(aiOption);
 
   const { data, error } = await supabase
-    .from(GEMINI_CONFIG_TABLE)
-    .select("*")
+    .from(aiOptionTable)
+    .select("apiKey, updated_at")
     .eq("userId", userId)
     .single();
 
@@ -61,8 +61,8 @@ export async function cloudGetApiKey(userId: string) {
   return { success: true, error: null, data };
 }
 
-export async function cloudCheckApiKey(userId: string) {
-  const response = await cloudGetApiKey(userId);
+export async function cloudCheckApiKey(userId: string, aiOption: AiOption) {
+  const response = await cloudGetApiKey(userId, aiOption);
 
   if (!response.success) {
     return {
@@ -73,7 +73,10 @@ export async function cloudCheckApiKey(userId: string) {
     };
   }
 
-  if (!response.data.gemini_api_key) {
+  console.log("[cloudCheckApiKey] response:");
+  console.log(response);
+
+  if (!response.data?.apiKey) {
     return { success: true, error: null, exist: false, lastUpdated: null };
   }
 
@@ -108,68 +111,5 @@ export async function cloudStoreApiKey(
     return { success: true };
   } catch (error) {
     return { success: false, error };
-  }
-}
-
-export async function cloudPromptGemini(
-  userId: string,
-  prompt: string,
-  context?: string,
-  chatHistory?: string[],
-  questionImage?: any
-) {
-  try {
-    const keyFetchResponse = await cloudGetApiKey(userId);
-
-    if (!keyFetchResponse.success || !keyFetchResponse.data) {
-      throw new Error("Unable to fetch API key");
-    }
-
-    const encryptedKey = keyFetchResponse.data.gemini_api_key;
-    if (!encryptedKey) {
-      throw new Error("No API key found");
-    }
-
-    const decryptedKey = await decryptKey(encryptedKey);
-
-    const genAI = new GoogleGenerativeAI(decryptedKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
-
-    const processedHistory =
-      chatHistory?.slice(1).map((m, i) => ({
-        role: i % 2 === 0 ? "user" : "model",
-        parts: [{ text: m }],
-      })) || [];
-
-    const chat = model.startChat({
-      history: processedHistory,
-      generationConfig: {
-        maxOutputTokens: 2048,
-      },
-    });
-
-    let result;
-    if (questionImage) {
-      result = await chat.sendMessage([
-        {
-          inlineData: {
-            data: questionImage.data,
-            mimeType: questionImage.type,
-          },
-        },
-        {
-          text: context ? `${context}\n\n${prompt}` : prompt,
-        },
-      ]);
-    } else {
-      result = await chat.sendMessage(
-        context ? `${context}\n\n${prompt}` : prompt
-      );
-    }
-
-    return result.response.text();
-  } catch (error) {
-    console.error("Error with Gemini request:", error);
-    throw error;
   }
 }

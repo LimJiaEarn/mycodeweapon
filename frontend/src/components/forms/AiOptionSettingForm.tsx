@@ -11,29 +11,26 @@ interface AiSettingsFormProps {
   apiKey: string;
   storePref: KeyStorePref;
   updateApiKey: (apiKey: string) => void;
-  updateStorePref: (storePref: string) => void;
   isSaving: boolean;
 }
 
 const AiOptionSettingForm = ({
   aiOption,
   apiKey,
-  storePref,
   updateApiKey,
-  updateStorePref,
   isSaving,
 }: AiSettingsFormProps) => {
   const fields: SettingFormField[] = [
-    {
-      id: "storePref",
-      label: "",
-      type: "select",
-      placeholder: "Select a preference",
-      value: storePref,
-      handleUpdate: updateStorePref,
-      disabled: isSaving,
-      selectOptions: STORAGE_OPTIONS,
-    },
+    // {
+    //   id: "storePref",
+    //   label: "",
+    //   type: "select",
+    //   placeholder: "Select a preference",
+    //   value: storePref,
+    //   handleUpdate: updateStorePref,
+    //   disabled: isSaving,
+    //   selectOptions: STORAGE_OPTIONS,
+    // },
     {
       id: "apiKey",
       label: "",

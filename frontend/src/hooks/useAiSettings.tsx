@@ -10,8 +10,8 @@ import {
 import { createClient } from "@/lib/supabase/client";
 import { User } from "@supabase/supabase-js";
 import { useState, useEffect } from "react";
-import { cloudStoreApiKey } from "@/app/actions/apiKeys";
-import { SimpleResponse } from "@/types/global";
+import { cloudStoreApiKey, cloudCheckApiKey } from "@/app/actions/apiKeys";
+import { SimpleDataResponse, SimpleResponse } from "@/types/global";
 
 interface AiConfigDetails {
   storePref: KeyStorePref;
@@ -135,6 +135,20 @@ export const useAiSettings = (user: User | null) => {
 
     retrieveApiDetails();
   }, [user]);
+
+  const checkApiKeyStoredInCloud = async (
+    aiOption: AiOption
+  ): Promise<SimpleDataResponse<boolean>> => {
+    if (!user) {
+      return { success: false, message: "Auth Error", data: false };
+    }
+    const res = await cloudCheckApiKey(user.id, aiOption);
+    if (!res.success) {
+      return { success: false, message: "Req Error", data: false };
+    }
+
+    return { success: true, message: "", data: res.exist };
+  };
 
   const getApiKeyStorePref = async (
     aiChoice: AiOption
@@ -297,7 +311,6 @@ export const useAiSettings = (user: User | null) => {
       if (error) throw error;
 
       // update in all aiOption_config
-      // todo: implement local storage for keystorepref.local
       const allAiOptions: AiOption[] = Object.values(AiOption);
 
       const allSavePromises = allAiOptions.map(
@@ -307,12 +320,12 @@ export const useAiSettings = (user: User | null) => {
           const { error } = await supabase.from(tableName).upsert({
             userId: user.id,
             defaultModel: AiOptionConfigDetails[option]?.defaultModel || "",
-            storePref: AiOptionConfigDetails[option]?.storePref || "",
+            storePref: KeyStorePref.CLOUD,
           });
 
           await saveApiKey(
             AiOptionConfigDetails[option]?.apiKey || "",
-            AiOptionConfigDetails[option]?.storePref || KeyStorePref.LOCAL,
+            KeyStorePref.CLOUD,
             option
           );
 
@@ -366,6 +379,7 @@ export const useAiSettings = (user: User | null) => {
 
     setApiKeyByAiOption,
     setStorePrefByAiOption,
+    checkApiKeyStoredInCloud,
 
     saveAiSettings,
     isSavingAiSettings,

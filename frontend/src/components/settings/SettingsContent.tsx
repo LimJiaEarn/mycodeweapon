@@ -36,7 +36,6 @@ const SettingsContent = () => {
     setDefaultAiModel,
 
     setApiKeyByAiOption,
-    setStorePrefByAiOption,
 
     isSavingAiSettings,
     saveAiSettings,
@@ -102,6 +101,11 @@ const SettingsContent = () => {
         className="flex flex-col justify-start items-start gap-2 w-full pt-4  max-w-[1000px]"
       >
         <h2 className="text-lg font-bold">API Keys</h2>
+        <p className="text-sm text-muted-foreground mt-1">
+          For security reasons, your API key is{" "}
+          <span className="underline">never</span> displayed (& fetched to your
+          browser)
+        </p>
         <Separator className="w-[90%] mb-2" />
         {Object.values(AiOption).map((ao, i) => {
           return (
@@ -114,7 +118,6 @@ const SettingsContent = () => {
                 apiKey={AiOptionConfigDetails[ao]?.apiKey || ""}
                 storePref={KeyStorePref.CLOUD}
                 updateApiKey={(val) => setApiKeyByAiOption(ao, val)}
-                updateStorePref={(val) => setStorePrefByAiOption(ao, val)}
                 isSaving={isSavingProfile || isSavingAiSettings}
               />
             </div>
