@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 import { User } from "@supabase/supabase-js";
 import { ProblemStatus } from "@/types/problem";
 import { PROBLEMS_TABLE } from "@/constants/supabase";
+import { DEFAULT_LANGUAGE_ID, languageTemplates } from "@/constants/judge0";
 
 import {
   Dialog,
@@ -107,8 +108,8 @@ export default function CreateProblemModal({
           title: formattedTitle,
           userId: user.id,
           status: ProblemStatus.InProgress,
-          code: "# your code here",
-          languageId: "71", // Python's language ID
+          code: languageTemplates[DEFAULT_LANGUAGE_ID] || "# your code here", // Use Python template
+          languageId: DEFAULT_LANGUAGE_ID, // Python's language ID
         })
         .select("id")
         .single();

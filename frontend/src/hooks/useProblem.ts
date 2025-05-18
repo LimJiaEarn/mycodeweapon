@@ -7,6 +7,7 @@ import { ProblemState, ProblemStatus } from "@/types/problem";
 import { PROBLEMS_TABLE, PROBLEM_IMAGE_BUCKET } from "@/constants/supabase";
 import { convertIsoTimeToUnix, getCurrentUTCTime } from "@/utils/timestamp";
 import { SimpleResponse } from "@/types/global";
+import { DEFAULT_LANGUAGE_ID, languageTemplates } from "@/constants/judge0";
 
 export const useProblem = (title: string, user: User | null) => {
   const DEFAULT_PROBLEM_STATE: ProblemState = {
@@ -14,8 +15,8 @@ export const useProblem = (title: string, user: User | null) => {
     userId: user?.id || "-",
     title: "untitled",
     status: ProblemStatus.InProgress,
-    code: "# your code here", //TODO: make this dynamic based on languageId
-    languageId: "71", // python's language Id
+    code: languageTemplates[DEFAULT_LANGUAGE_ID] || "# your code here", // Default to Python template
+    languageId: DEFAULT_LANGUAGE_ID, // python's language Id
     questionImage: null,
     imageUrl: null,
     imagePreview: "",
@@ -206,7 +207,20 @@ export const useProblem = (title: string, user: User | null) => {
   };
 
   const setLanguageId = (languageId: string) => {
-    updateProblemStates({ languageId });
+    // Check if the code is empty or matches a template (indicating it hasn't been edited)
+    const currentCode = problemStates.code;
+    const currentLangId = problemStates.languageId;
+
+    // If code is empty or matches the current language template, update it to the new language template
+    if (!currentCode || currentCode === languageTemplates[currentLangId]) {
+      updateProblemStates({
+        languageId,
+        code: languageTemplates[languageId] || "// your code here",
+      });
+    } else {
+      // Otherwise just update the language ID
+      updateProblemStates({ languageId });
+    }
   };
 
   const saveProblem = async () => {
