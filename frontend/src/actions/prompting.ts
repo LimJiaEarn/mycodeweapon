@@ -1,10 +1,5 @@
 "use server";
-import {
-  AiOption,
-  OpenAiInitParams,
-  AiChatMessage,
-  AiChatRole,
-} from "@/types/ai";
+import { AiOption, AiChatRole } from "@/types/ai";
 import { getAiOptionBaseUrl } from "@/constants/aiSettings";
 import { fetchDecryptedApiKey } from "@/app/actions/apiKeys";
 import OpenAi from "openai";
@@ -23,7 +18,6 @@ interface cloudPromptAiProps {
   userId: string;
   aiOption: AiOption;
   aiModel: string;
-  apiKey: string;
   chatMessages: ChatCompletionMessageParam[];
   codeContext: userCode | null;
   imageBase64: string | null;
@@ -34,16 +28,20 @@ export const cloudPromptAi = async ({
   userId,
   aiOption,
   aiModel,
-  apiKey,
   chatMessages,
   codeContext,
   imageBase64,
   system_prompt,
 }: cloudPromptAiProps): Promise<SimpleDataResponse<string>> => {
   try {
+    const { data: apiKey } = await fetchDecryptedApiKey(userId, aiOption);
+
     if (!apiKey) {
-      const { data } = await fetchDecryptedApiKey(userId, aiOption);
-      apiKey = data;
+      return {
+        success: false,
+        message: "API key not found",
+        data: "",
+      };
     }
 
     // Prepare messages array with system prompt
@@ -91,7 +89,7 @@ export const cloudPromptAi = async ({
 
     // Add request details for debugging
     console.log(`Sending request to ${aiOption} with model ${aiModel}`);
-    
+
     const response = await llmClient.chat.completions.create({
       model: aiModel,
       messages,
@@ -124,9 +122,9 @@ export const cloudPromptAi = async ({
       param: error.param,
       statusCode: error.status || error.statusCode,
     };
-    
+
     console.error("LLM API Error:", errorDetails);
-    
+
     return {
       success: false,
       message: `Failed to get reply: ${errorDetails.message}`,

@@ -23,9 +23,3 @@ export enum AiChatRole {
   Ai = "assistant",
   Image = "image_url",
 }
-
-export type AiChatMessage = {
-  role: AiChatRole;
-  content: string;
-  image_url?: any;
-};

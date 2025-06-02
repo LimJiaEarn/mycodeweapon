@@ -1,20 +1,21 @@
 "use client";
 
-import { AiChatMessage, AiOption, AiChatRole, KeyStorePref } from "@/types/ai";
+import { AiOption, AiChatRole } from "@/types/ai";
 import { useState, useEffect } from "react";
 import { FIRST_MESSAGE } from "@/constants/aiSettings";
 import { cloudPromptAi } from "@/actions/prompting";
 import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import { createNewChat } from "@/actions/mongodb";
 
 interface useAiChatProps {
+  problemId: string;
   userId: string;
   questionImage: File | null;
+  imageUrl: string | null;
   code: string;
   language: string;
   aiOption: AiOption;
   aiModel: string;
-  storePref: KeyStorePref;
-  apiKey: string | null;
   systemPrompt: string;
 }
 
@@ -27,14 +28,14 @@ export interface promptAiParams {
 }
 
 export const useAiChat = ({
+  problemId,
   userId,
   questionImage,
+  imageUrl,
   code,
   language,
   aiOption,
   aiModel,
-  storePref,
-  apiKey,
   systemPrompt,
 }: useAiChatProps) => {
   const [prompt, setPrompt] = useState<string>("");
@@ -47,6 +48,21 @@ export const useAiChat = ({
   const [includeCode, setIncludeCode] = useState<boolean>(true);
   const [includeQuestionImg, setIncludeQuestionImg] = useState<boolean>(true);
   const [imageBase64, setImageBase64] = useState<string | null>(null);
+
+  // create a new entry in chat
+  const [chatId, setChatId] = useState<string>("");
+  useEffect(() => {
+    const initChatId = async () => {
+      const chatId = await createNewChat(userId, problemId, imageUrl || "");
+      setChatId(chatId);
+    };
+
+    initChatId();
+  }, [userId, problemId, imageUrl]);
+
+  useEffect(() => {
+    console.log(`chatId: ${chatId}`);
+  }, [chatId]);
 
   useEffect(() => {
     const convertImageToBase64 = async () => {
@@ -102,14 +118,6 @@ export const useAiChat = ({
       ]);
       setPrompt("");
 
-      if (storePref === KeyStorePref.LOCAL) {
-        apiKey = localStorage.getItem(`${aiOption}-key`);
-      }
-
-      if (!apiKey && storePref !== KeyStorePref.CLOUD) {
-        throw new Error("No API Key set");
-      }
-
       const {
         success,
         message,
@@ -118,7 +126,6 @@ export const useAiChat = ({
         userId,
         aiOption,
         aiModel,
-        apiKey: apiKey || "",
         chatMessages,
         codeContext: includeCode ? { code, language } : null,
         imageBase64: includeQuestionImg ? imageBase64 : null,
