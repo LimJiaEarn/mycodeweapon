@@ -57,7 +57,7 @@ export const cloudPromptAi = async ({
       ],
     };
 
-    // Attach the image if it's the first user message
+    // Attach the image if exist
     if (imageBase64) {
       (contextContent.content as ChatCompletionContentPart[]).push({
         type: "image_url",

@@ -4,6 +4,7 @@ export enum AiOption {
   // DeepSeek = "DEEPSEEK",
   Claude = "CLAUDE",
   // Perplexity = "PERPLEXITY",
+  Qwen = "QWEN" // https://www.alibabacloud.com/help/en/model-studio/developer-reference/get-api-key
 }
 
 export enum KeyStorePref {

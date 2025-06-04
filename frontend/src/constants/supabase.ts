@@ -10,6 +10,7 @@ export const OPENAI_CONFIG_TABLE: string = "openai_config";
 export const DEEPSEEK_CONFIG_TABLE: string = "deepseek_config";
 export const CLAUDE_CONFIG_TABLE: string = "claude_config"; //TODO: RLS Policies
 export const PERPLEXITY_CONFIG_TABLE: string = "perplexity_config"; //TODO: RLS Policies
+export const QWEN_CONFIG_TABLE: string = "qwen_config"; //TODO: RLS Policies 
 
 // Object Storage Buckets
 export const PROBLEM_IMAGE_BUCKET: string = "problemImages";
@@ -64,6 +65,8 @@ export const getAiConfigTable = (aiChoice: AiOption): string => {
       return OPENAI_CONFIG_TABLE;
     case AiOption.Claude:
       return CLAUDE_CONFIG_TABLE;
+    case AiOption.Qwen:
+      return QWEN_CONFIG_TABLE;
     // case AiOption.DeepSeek:
     //   return DEEPSEEK_CONFIG_TABLE;
     // case AiOption.Perplexity:
