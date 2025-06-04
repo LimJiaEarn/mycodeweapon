@@ -60,9 +60,9 @@ export const useAiChat = ({
     initChatId();
   }, [userId, problemId, imageUrl]);
 
-  useEffect(() => {
-    console.log(`chatId: ${chatId}`);
-  }, [chatId]);
+  // useEffect(() => {
+  //   console.log(`chatId: ${chatId}`);
+  // }, [chatId]);
 
   useEffect(() => {
     const convertImageToBase64 = async () => {

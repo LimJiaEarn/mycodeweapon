@@ -27,7 +27,7 @@ export const useProblem = (title: string, user: User | null) => {
   useEffect(() => {
     if (user) {
       updateProblemStates({ userId: user.id });
-      console.log(`[useProblem] updated userId: ${user.id}`);
+      // console.log(`[useProblem] updated userId: ${user.id}`);
     }
   }, [user]);
 
@@ -81,18 +81,18 @@ export const useProblem = (title: string, user: User | null) => {
         // fetch the image if such exist
         if (data.imageUrl) {
           try {
-            console.log(
-              `[useProblem] fetchProblem() - imageUrl: ${data.imageUrl}`
-            );
+            // console.log(
+            //   `[useProblem] fetchProblem() - imageUrl: ${data.imageUrl}`
+            // );
 
             // cache this imageUrl's filepath
             const storagePathRegex = data.imageUrl.match(
               /problemImages\/(.+)(\?.*|$)/
             );
             const storagePath = storagePathRegex ? storagePathRegex[1] : null;
-            console.log(
-              `[useProblem] fetchProblem() - storagePath: ${storagePath}`
-            );
+            // console.log(
+            //   `[useProblem] fetchProblem() - storagePath: ${storagePath}`
+            // );
             setOldImagePath(storagePath);
 
             updateProblemStates({

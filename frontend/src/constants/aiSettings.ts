@@ -15,14 +15,7 @@ export const AI_OPTIONS_AND_MODELS: Record<AiOption, string[]> = {
     "claude-3-sonnet-20240229",
     "claude-3-haiku-20240307",
   ],
-  QWEN: [
-    // "qwen-turbo-latest",
-    // "qwen-plus-latest",
-    // "qwen-max-latest",
-    // "qvq-max-latest",
-    "qwq-plus",
-    "qwen-vl-max-latest",
-  ],
+  QWEN: ["qwen-vl-plus"],
   // DEEPSEEK: ["deepseek-chat", "deepseek-reasoner"],
   // PERPLEXITY: [
   //   "sonar",
@@ -123,9 +116,7 @@ export const AI_MODELS_DISPLAY = [
   { model: "sonar-reasoning", display: "Sonar Reasoning" },
   { model: "sonar-reasoning-pro", display: "Sonar Reasoning Pro" },
   { model: "sonar-deep-research", display: "Sonar Deep Research" },
-  // { model: "qvq-max-latest", display: "QVQ Max" },
-  { model: "qwq-plus", display: "QWQ Plus" },
-  { model: "qwen-vl-max-latest", display: "Qwen-VL" },
+  { model: "qwen-vl-plus", display: "Qwen VL Plus" },
 ];
 
 export const displayAiModel = (aiModel: string): string => {
