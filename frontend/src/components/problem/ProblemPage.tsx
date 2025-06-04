@@ -140,7 +140,7 @@ const ProblemPage = ({ title }: { title: string }) => {
                 >
                   <AiChat
                     user={user}
-                    questionImage={problemStates.questionImage}
+                    problemStates={problemStates}
                     code={problemStates.code}
                     language={
                       judge0ToMonacoMap[problemStates.languageId] || "python"

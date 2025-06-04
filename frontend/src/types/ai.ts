@@ -4,6 +4,7 @@ export enum AiOption {
   // DeepSeek = "DEEPSEEK",
   Claude = "CLAUDE",
   // Perplexity = "PERPLEXITY",
+  Qwen = "QWEN" // https://www.alibabacloud.com/help/en/model-studio/developer-reference/get-api-key
 }
 
 export enum KeyStorePref {
@@ -23,9 +24,3 @@ export enum AiChatRole {
   Ai = "assistant",
   Image = "image_url",
 }
-
-export type AiChatMessage = {
-  role: AiChatRole;
-  content: string;
-  image_url?: any;
-};

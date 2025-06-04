@@ -73,8 +73,8 @@ export async function cloudCheckApiKey(userId: string, aiOption: AiOption) {
     };
   }
 
-  console.log("[cloudCheckApiKey] response:");
-  console.log(response);
+  // console.log("[cloudCheckApiKey] response:");
+  // console.log(response);
 
   if (!response.data?.apiKey) {
     return { success: true, error: null, exist: false, lastUpdated: null };

@@ -6,7 +6,6 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, SendIcon, ChevronDown } from "lucide-react";
 import { useEffect } from "react";
 import { Label } from "@/components/ui/label";
-import { useApiKey } from "@/providers/ai-provider";
 import { AiOption } from "@/types/ai";
 import {
   AI_OPTIONS_AND_MODELS,
@@ -30,15 +29,16 @@ import ChatMessages from "./ChatMessages";
 import { useAiSettings } from "@/hooks/useAiSettings";
 import { User } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
+import { ProblemState } from "@/types/problem";
 
 interface AiChatProps {
   user: User | null;
-  questionImage: File | null;
+  problemStates: ProblemState;
   code: string;
   language: string;
 }
 
-const AiChat = ({ user, questionImage, code, language }: AiChatProps) => {
+const AiChat = ({ user, problemStates, code, language }: AiChatProps) => {
   const userId = user?.id || "";
   const router = useRouter();
 
@@ -50,11 +50,7 @@ const AiChat = ({ user, questionImage, code, language }: AiChatProps) => {
     checkApiKeyStoredInCloud,
   } = useAiSettings(user);
 
-  const { apiKey, keyPref, isSavingPref } = useApiKey();
-
   const { toast } = useToast();
-
-  const { saveApiKey } = useAiSettings(user);
 
   const [selectedModel, setSelectedModel] = useState<string>(defaultAiModel);
   const [selectedProvider, setSelectedProvider] =
@@ -102,14 +98,14 @@ const AiChat = ({ user, questionImage, code, language }: AiChatProps) => {
     setIncludeQuestionImg,
     submitPrompt,
   } = useAiChat({
+    problemId: problemStates.id,
     userId,
     aiOption: selectedProvider,
     aiModel: selectedModel,
-    questionImage,
+    questionImage: problemStates.questionImage,
+    imageUrl: problemStates.imageUrl,
     code,
     language,
-    storePref: keyPref,
-    apiKey: apiKey,
     systemPrompt: prePrompt,
   });
 

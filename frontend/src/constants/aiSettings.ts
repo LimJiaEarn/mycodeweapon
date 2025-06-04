@@ -2,13 +2,12 @@ import { AiOption } from "@/types/ai";
 
 export const AI_OPTIONS_AND_MODELS: Record<AiOption, string[]> = {
   GEMINI: [
-    "gemini-1.5-pro",
-    "gemini-1.5-flash",
-    "gemini-2.0-flash",
     "gemini-2.0-flash-lite",
+    "gemini-2.0-flash",
+    "gemini-2.5-flash-preview-05-20",
+    "gemini-2.5-pro-preview-05-06",
   ],
   OPENAI: ["o1", "o1-mini", "o3-mini", "gpt-4o", "gpt-4o-mini", "gpt-4-turbo"],
-  // DEEPSEEK: ["deepseek-chat", "deepseek-reasoner"],
   CLAUDE: [
     "claude-3-7-sonnet-20250219",
     "claude-3-5-sonnet-20240620",
@@ -16,6 +15,15 @@ export const AI_OPTIONS_AND_MODELS: Record<AiOption, string[]> = {
     "claude-3-sonnet-20240229",
     "claude-3-haiku-20240307",
   ],
+  QWEN: [
+    // "qwen-turbo-latest",
+    // "qwen-plus-latest",
+    // "qwen-max-latest",
+    // "qvq-max-latest",
+    "qwq-plus",
+    "qwen-vl-max-latest",
+  ],
+  // DEEPSEEK: ["deepseek-chat", "deepseek-reasoner"],
   // PERPLEXITY: [
   //   "sonar",
   //   "sonar-pro",
@@ -29,6 +37,7 @@ export const BASE_URLS: Record<AiOption, string> = {
   GEMINI: "https://generativelanguage.googleapis.com/v1beta/openai/",
   OPENAI: "",
   CLAUDE: "https://api.anthropic.com/v1/",
+  QWEN: "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/",
   // DEEPSEEK: "https://api.deepseek.com/v1",
   // PERPLEXITY: "https://api.perplexity.ai",
 };
@@ -92,10 +101,10 @@ export const getAiOptionBaseUrl = (aiOption: AiOption): string => {
 };
 
 export const AI_MODELS_DISPLAY = [
-  { model: "gemini-1.5-pro", display: "Gemini 1.5 Pro" },
-  { model: "gemini-1.5-flash", display: "Gemini 1.5 Flash" },
-  { model: "gemini-2.0-flash", display: "Gemini 2.0 Flash" },
   { model: "gemini-2.0-flash-lite", display: "Gemini 2.0 Flash-Lite" },
+  { model: "gemini-2.0-flash", display: "Gemini 2.5 Flash" },
+  { model: "gemini-2.5-flash-preview-05-20", display: "Gemini 2.5 Flash" },
+  { model: "gemini-2.5-pro-preview-05-06", display: "Gemini 2.5 Pro" },
   { model: "o1", display: "GPT o1" },
   { model: "o1-mini", display: "GPT o1-mini" },
   { model: "o3-mini", display: "GPT o3-mini" },
@@ -114,6 +123,9 @@ export const AI_MODELS_DISPLAY = [
   { model: "sonar-reasoning", display: "Sonar Reasoning" },
   { model: "sonar-reasoning-pro", display: "Sonar Reasoning Pro" },
   { model: "sonar-deep-research", display: "Sonar Deep Research" },
+  // { model: "qvq-max-latest", display: "QVQ Max" },
+  { model: "qwq-plus", display: "QWQ Plus" },
+  { model: "qwen-vl-max-latest", display: "Qwen-VL" },
 ];
 
 export const displayAiModel = (aiModel: string): string => {
@@ -130,6 +142,8 @@ export const displayAiOption = (aiChoice: AiOption): string => {
       return "OpenAI";
     case AiOption.Claude:
       return "Claude";
+    case AiOption.Qwen:
+      return "Qwen";
     // case AiOption.DeepSeek:
     //   return "DeepSeek";
     // case AiOption.Perplexity:

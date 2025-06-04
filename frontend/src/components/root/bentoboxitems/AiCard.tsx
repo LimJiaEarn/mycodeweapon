@@ -13,8 +13,8 @@ export default function AiCard({ className }: { className: string }) {
   return (
     <Card className={className}>
       <CardTitle>LLM Integrations</CardTitle>
-      <CardDescription>
-        Powered by cutting-edge and the latest AI models
+      <CardDescription className="max-w-full">
+        We support over 10+ latest and cutting-edge LLM models
       </CardDescription>
       <CardSkeletonContainer>
         <Skeleton />
