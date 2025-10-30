@@ -95,7 +95,7 @@ export const getAiOptionBaseUrl = (aiOption: AiOption): string => {
 
 export const AI_MODELS_DISPLAY = [
   { model: "gemini-2.0-flash-lite", display: "Gemini 2.0 Flash-Lite" },
-  { model: "gemini-2.0-flash", display: "Gemini 2.5 Flash" },
+  { model: "gemini-2.0-flash", display: "Gemini 2.0 Flash" },
   { model: "gemini-2.5-flash-preview-05-20", display: "Gemini 2.5 Flash" },
   { model: "gemini-2.5-pro-preview-05-06", display: "Gemini 2.5 Pro" },
   { model: "o1", display: "GPT o1" },
