@@ -18,7 +18,7 @@ export async function signUp_SA({
 }: SignUpCredentials): Promise<AuthResult> {
   const supabase = await createClient();
 
-  const reqHeader = headers();
+  const reqHeader = await headers();
   const host = reqHeader.get("x-forwarded-host") || reqHeader.get("host");
   const protocol =
     reqHeader.get("x-forwarded-proto") ||

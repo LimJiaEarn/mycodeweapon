@@ -1,5 +1,5 @@
 const nextConfig = {
-  /* config options here */
+  outputFileTracingRoot: new URL("..", import.meta.url).pathname,
 };
 
 export default nextConfig;

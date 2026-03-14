@@ -1,2 +1,3 @@
 cronjobs/.env
 judge0-apigateway/.env
+judge0-server/judge0.conf

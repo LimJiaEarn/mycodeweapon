@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Resolve script directory so it works regardless of where it's called from
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$SCRIPT_DIR"
+
 echo "Pulling latest changes"
 git pull origin main
 echo "Pulled latest changes"

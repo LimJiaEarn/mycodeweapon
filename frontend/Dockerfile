@@ -1,11 +1,10 @@
-FROM node:18-alpine
+FROM node:22-alpine
 
 WORKDIR /app
 
 COPY package*.json ./
 
-# fix compatability issues with react-19
-RUN npm install --force
+RUN npm install
 
 # For prod
 # COPY . .

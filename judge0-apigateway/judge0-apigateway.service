@@ -1,0 +1,27 @@
+# Judge0 API Gateway systemd service template
+#
+# Install:
+#   sudo cp judge0-apigateway.service /etc/systemd/system/
+#   # Edit paths below to match your deployment
+#   sudo systemctl daemon-reload
+#   sudo systemctl enable --now judge0-apigateway
+
+[Unit]
+Description=Judge0 API Gateway
+After=network.target docker.service
+
+[Service]
+User=root
+WorkingDirectory=/opt/mycodeweapon/judge0-apigateway
+Environment=FLASK_ENV=production
+Environment=FLASK_APP=app.py
+Environment=PYTHONPATH=/opt/mycodeweapon/judge0-apigateway
+EnvironmentFile=/opt/mycodeweapon/judge0-apigateway/.env
+ExecStart=/opt/mycodeweapon/judge0-apigateway/venv/bin/python -m flask run --host=0.0.0.0 --port=5001
+Restart=on-failure
+RestartSec=5
+StandardOutput=append:/var/log/judge0-apigateway.log
+StandardError=append:/var/log/judge0-apigateway.error.log
+
+[Install]
+WantedBy=multi-user.target
