@@ -35,14 +35,14 @@ def test():
 def proxy(path):
 
     # Validate the request body
-    body = request.get_json() or {}
+    body = request.get_json(silent=True) or {}
     userId = request.headers.get('X-User-Id', '-')
     if userId == "-":
         return Response(
-        json.dumps({"error": "Invalid JSON body"}),
-        status=400,
-        mimetype='application/json'
-    )
+            json.dumps({"error": "Missing X-User-Id header"}),
+            status=400,
+            mimetype='application/json'
+        )
 
     # Check rate limit for /submissions route (code execution)
     if path.startswith('submissions'):
@@ -51,8 +51,8 @@ def proxy(path):
             
             if not result.data:
                 supabase.table(SUPABASE_RATE_LIMIT_TABLE).insert({
-                    '"userId"': userId,
-                    '"daylimit"': DEFAULT_RATE_LIMIT,
+                    'userId': userId,
+                    'daylimit': DEFAULT_RATE_LIMIT,
                     'usage': 1
                 }).execute()
                 
@@ -69,7 +69,7 @@ def proxy(path):
                 # update usage
                 supabase.table(SUPABASE_RATE_LIMIT_TABLE) \
                     .update({'usage': data['usage'] + 1}) \
-                    .eq('"userId"', userId) \
+                    .eq('userId', userId) \
                     .execute()
 
         except Exception as e:
